@@ -1,5 +1,5 @@
 const Notfound = () => {
-  return <div>잘못된 페이지입니다.</div>;
+  return <div>Page not found</div>; //# UPDATE 2025-04-13 : fallback 문구 수정
 };
 
 export default Notfound;
