@@ -1,6 +1,9 @@
 import "./Header.css";
 
-/* 공통 Header Component */
+/**
+ * Common Header Component
+ * - Displays left, center, and right sections
+ */
 const Header = ({ title, leftChild, rightChild }) => {
   return (
     <header className="Header">

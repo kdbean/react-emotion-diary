@@ -1,10 +1,10 @@
-/* 사용자 정의 폰트 설정 */
+/* Custom font definition */
 @font-face {
   font-family: "NanumPenScript";
   src: url("/NanumPenScript-Regular.ttf");
 }
 
-/* Basic Page Style */
+/* Basic page layout and background color */
 html,
 body {
   margin: 0px;
@@ -12,7 +12,7 @@ body {
   background-color: rgb(246, 246, 246);
 }
 
-/* React Root Style : React App Renders */
+/* React root container (where the React app is rendered) */
 #root {
   background-color: white;
   max-width: 600px;
@@ -24,7 +24,7 @@ body {
   padding: 0px 20px;
 }
 
-/* 하위 모든 요소에 사용자 정의 폰트 적용 */
+/* Apply the custom font to all elements inside <body> */
 body * {
   font-family: "NanumPenScript";
 }
