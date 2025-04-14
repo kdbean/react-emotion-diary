@@ -10,6 +10,7 @@ body {
   margin: 0px;
   width: 100%;
   background-color: rgb(246, 246, 246);
+  display: flex; /* ADD 2025-04-14 : fix body height limitation by applying flex layout */
 }
 
 /* React root container (where the React app is rendered) */
