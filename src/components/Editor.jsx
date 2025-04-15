@@ -44,7 +44,7 @@ const getStringedDate = (targetDate) => {
 const Editor = ({ onSubmit }) => {
   const [input, setInput] = useState({
     createdDate: new Date(),
-    emotionId: 3,
+    emotionId: "",
     content: "",
   });
 
