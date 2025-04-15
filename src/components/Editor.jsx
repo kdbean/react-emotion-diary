@@ -52,6 +52,17 @@ const Editor = ({ onSubmit }) => {
 
     if (name === "createdDate") {
       value = new Date(value); // <input type="date"> returns string
+
+      //# ADD START 2025-04-16 : block future date selection with alert in Editor
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Remove hours/minutes/seconds from today's date
+      value.setHours(0, 0, 0, 0); // Remove hours/minutes/seconds from selected date
+
+      if (value > today) {
+        alert("Future dates are not allowed🚫");
+        return; // Prevent state update if date is in the future
+      }
+      //# ADD END 2025-04-16 : block future date selection with alert in Editor
     }
 
     setInput({
@@ -96,7 +107,7 @@ const Editor = ({ onSubmit }) => {
               }
               key={item.emotionId}
               {...item}
-              // UPDATE 2025-04-15 : Type casting for stable emotionId comparison
+              //# UPDATE 2025-04-15 : Type casting for stable emotionId comparison
               //isSelected={item.emotionId === input.emotionId}
               isSelected={String(item.emotionId) === String(input.emotionId)}
             />
