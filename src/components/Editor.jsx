@@ -1,10 +1,15 @@
 import "./Editor.css";
 import EmotionItem from "./EmotionItem";
 import Button from "./Button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @constant emotionList
- * List of selectable emotions with corresponding IDs
+ * Predefined list of emotions to be selected by user.
+ * Each object includes:
+ * - emotionId: numerical identifier
+ * - emotionName: label displayed under the emotion icon
  */
 const emotionList = [
   { emotionId: 1, emotionName: "Perfect" },
@@ -15,19 +20,77 @@ const emotionList = [
 ];
 
 /**
- * @component Editor
- * Diary editor page component
- * - Displays date selector, emotion picker, diary textarea, and action buttons
+ * @function getStringedDate
+ * Converts Date object into a string formatted as 'YYYY-MM-DD'.
+ *
+ * @param {Date} targetDate
+ * @returns {string}
  */
-const Editor = () => {
-  const emotionId = 5; // Currently selected emotion (mocked for now)
+const getStringedDate = (targetDate) => {
+  let year = targetDate.getFullYear();
+  let month = targetDate.getMonth() + 1;
+  let date = targetDate.getDate();
+
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  if (date < 10) {
+    date = `0${date}`;
+  }
+
+  return `${year}-${month}-${date}`;
+};
+
+const Editor = ({ onSubmit }) => {
+  const [input, setInput] = useState({
+    createdDate: new Date(),
+    emotionId: 3,
+    content: "",
+  });
+
+  // Navigation handler (React Router)
+  const nav = useNavigate();
+
+  /**
+   * Handles input changes from:
+   * - Date input : converted to Date object
+   * - Textarea : content
+   * - Emotion selection : custom event structure
+   *
+   * @param {Event | { target: { name: string, value: any }}} e
+   */
+  const onChangeInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "createdDate") {
+      value = new Date(value); // <input type="date"> returns string
+    }
+
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  /**
+   * Calls the provided onSubmit prop with the current input state.
+   */
+  const onClickSubmitButton = () => {
+    onSubmit(input);
+  };
 
   return (
     <div className="Editor">
       {/* Date input section */}
       <section className="date_section">
         <h4>Date</h4>
-        <input type="date" />
+        <input
+          name="createdDate"
+          onChange={onChangeInput}
+          value={getStringedDate(input.createdDate)}
+          type="date"
+        />
       </section>
 
       {/* Emotion selection section */}
@@ -36,9 +99,17 @@ const Editor = () => {
         <div className="emotion_list_wrapper">
           {emotionList.map((item) => (
             <EmotionItem
+              onClick={() =>
+                onChangeInput({
+                  target: {
+                    name: "emotionId",
+                    value: item.emotionId,
+                  },
+                })
+              }
               key={item.emotionId}
               {...item}
-              isSelected={item.emotionId === emotionId}
+              isSelected={item.emotionId === input.emotionId}
             />
           ))}
         </div>
@@ -47,13 +118,22 @@ const Editor = () => {
       {/* Diary text input section */}
       <section className="content_section">
         <h4>Write your diary</h4>
-        <textarea placeholder="What about Today?" />
+        <textarea
+          name="content"
+          value={input.content}
+          onChange={onChangeInput}
+          placeholder="What about Today?"
+        />
       </section>
 
       {/* Submit/Cancel buttons */}
       <section className="button_section">
-        <Button text={"Cancel"} />
-        <Button text={"Submit"} type={"POSITIVE"} />
+        <Button onClick={() => nav(-1)} text={"Cancel"} />
+        <Button
+          onClick={onClickSubmitButton}
+          text={"Submit"}
+          type={"POSITIVE"}
+        />
       </section>
     </div>
   );
