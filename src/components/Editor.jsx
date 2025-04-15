@@ -60,6 +60,13 @@ const Editor = ({ onSubmit }) => {
 
       if (value > today) {
         alert("Future dates are not allowed🚫");
+
+        // Reset the date input back to today
+        setInput({
+          ...input,
+          [name]: new Date(), // today
+        });
+
         return; // Prevent state update if date is in the future
       }
       //# ADD END 2025-04-16 : block future date selection with alert in Editor
