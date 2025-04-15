@@ -109,7 +109,9 @@ const Editor = ({ onSubmit }) => {
               }
               key={item.emotionId}
               {...item}
-              isSelected={item.emotionId === input.emotionId}
+              // UPDATE 2025-04-15 : Type casting for stable emotionId comparison
+              //isSelected={item.emotionId === input.emotionId}
+              isSelected={String(item.emotionId) === String(input.emotionId)}
             />
           ))}
         </div>
