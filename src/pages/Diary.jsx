@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 import Viewer from "../components/Viewer";
 import useDiary from "../hooks/useDiary";
-import { getStringedDate } from "../util/get-stringed-date";
+import { formatDisplayDate } from "../util/get-stringed-date"; //# UPDATE 2025-04-18 : replace function (getStringedDate → formatDisplayDate)
 
 /**
  * @component Diary
@@ -21,13 +21,13 @@ const Diary = () => {
   }
 
   const { createdDate, emotionId, content } = curDiaryItem;
-  const title = getStringedDate(new Date(createdDate)); // Format date for title
+  const title = formatDisplayDate(new Date(createdDate)); // Format date for title
 
   return (
     <div>
       {/* Page Header */}
       <Header
-        title={`${title} Diary`}
+        title={`Diary - ${title} 📕`} //# UPDATE 2025-04-18 : replace getStringedDate with formatDisplayDate for Diary header
         leftChild={<Button onClick={() => nav(-1)} text={"< back"} />}
         rightChild={
           <Button onClick={() => nav(`/edit/${params.id}`)} text={"edit"} />
