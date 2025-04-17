@@ -1,7 +1,7 @@
 import "./Editor.css";
 import EmotionItem from "./EmotionItem";
 import Button from "./Button";
-import { useState } from "react";
+import { useState, useEffect } from "react"; //# ADD 2025-04-17: import useEffect Hook
 import { useNavigate } from "react-router-dom";
 
 import { emotionList } from "../constants/emotions";
@@ -28,7 +28,7 @@ const getStringedDate = (targetDate) => {
   return `${year}-${month}-${date}`;
 };
 
-const Editor = ({ onSubmit }) => {
+const Editor = ({ initData, onSubmit }) => {
   const [input, setInput] = useState({
     createdDate: new Date(),
     emotionId: "",
@@ -37,6 +37,18 @@ const Editor = ({ onSubmit }) => {
 
   // Navigation handler (React Router)
   const nav = useNavigate();
+
+  // # ADD START 2025-04-17 : implement "Edit" Page for updating diary entries
+  //- Initialize state from initData when editing
+  useEffect(() => {
+    if (initData) {
+      setInput({
+        ...initData,
+        createdDate: new Date(Number(initData.createdDate)),
+      });
+    }
+  }, [initData]);
+  // # ADD END 2025-04-17 : implement "Edit" Page for updating diary entries
 
   /**
    * Handles input changes from:
