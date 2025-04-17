@@ -19,3 +19,19 @@ export const getStringedDate = (targetDate) => {
 
   return `${year}-${month}-${date}`;
 };
+
+/**
+ * ADD 2025-04-18 : formatDisplayDate for short display-style date formatting
+ * @function formatDisplayDate
+ * Formats a Date object into a short, human-readable string for UI display. (e.g. "Jan 1, 2025")
+ *
+ * @param {Date} targetDate - The date to format
+ * @returns {string} Formatted date string in "MMM D, YYYY" format
+ */
+export const formatDisplayDate = (targetDate) => {
+  return targetDate.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
