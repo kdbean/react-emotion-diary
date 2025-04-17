@@ -5,28 +5,7 @@ import { useState, useEffect } from "react"; //# ADD 2025-04-17: import useEffec
 import { useNavigate } from "react-router-dom";
 
 import { emotionList } from "../constants/emotions";
-
-/**
- * @function getStringedDate
- * Converts Date object into a string formatted as 'YYYY-MM-DD'.
- *
- * @param {Date} targetDate
- * @returns {string}
- */
-const getStringedDate = (targetDate) => {
-  let year = targetDate.getFullYear();
-  let month = targetDate.getMonth() + 1;
-  let date = targetDate.getDate();
-
-  if (month < 10) {
-    month = `0${month}`;
-  }
-  if (date < 10) {
-    date = `0${date}`;
-  }
-
-  return `${year}-${month}-${date}`;
-};
+import { getStringedDate } from "../util/get-stringed-date";
 
 const Editor = ({ initData, onSubmit }) => {
   const [input, setInput] = useState({
