@@ -66,9 +66,16 @@ const Home = () => {
 
   return (
     <div>
-      {/* Header with title (year/month) and month navigation buttons */}
+      {/* Header with title, month navigation buttons */}
       <Header
-        title={`${pivotDate.getFullYear()}년 ${pivotDate.getMonth() + 1}월`}
+        //# UPDATE START 2025-04-19 : change header date format to 'MMMM yyyy'
+        //title={`${pivotDate.getFullYear()}년 ${pivotDate.getMonth() + 1}월`}
+        title={`${pivotDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+        })}`}
+        //# UPDATE END 2025-04-19 : change header date format to 'MMMM yyyy'
+
         leftChild={<Button onClick={onDecreaseMonth} text={"<"} />}
         rightChild={<Button onClick={onIncreaseMonth} text={">"} />}
       />
