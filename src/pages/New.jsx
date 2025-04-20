@@ -25,6 +25,14 @@ const New = () => {
    * @param {string} input.content - Diary content
    */
   const onSubmit = (input) => {
+    //# ADD START 2025-04-20 : EmotionId validation
+    //- Prevent saving if no emotion is selected
+    if (!input.emotionId) {
+      alert("Please select your emotion before saving.");
+      return;
+    }
+    //# ADD END 2025-04-20 : EmotionId validation
+
     onCreate(input.createdDate.getTime(), input.emotionId, input.content);
     nav("/", { replace: true }); // Prevents back navigation to form
   };
