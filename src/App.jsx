@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { useReducer, useRef, createContext } from "react";
+import { useReducer, useRef, createContext, useEffect, useState } from "react"; //# UPDATE 2025-04-20 : import useEffect, useState Hook
 
 // Pages
 import Home from "./pages/Home";
@@ -9,47 +9,48 @@ import Diary from "./pages/Diary";
 import Edit from "./pages/Edit";
 import Notfound from "./pages/Notfound";
 
-// Dummy data for test
-const mockData = [
-  {
-    id: 1,
-    createdDate: new Date("2025-04-13").getTime(),
-    emotionId: 1,
-    content: "Record #1",
-  },
-  {
-    id: 2,
-    createdDate: new Date("2025-04-12").getTime(),
-    emotionId: 2,
-    content: "Record #2",
-  },
-  {
-    id: 3,
-    createdDate: new Date("2025-03-17").getTime(),
-    emotionId: 3,
-    content: "Record #3",
-  },
-];
-
-// Reducer function for managing diary state
-// Handles Create / Update / Delete based on action type
+/**
+ * Reducer function to manage diary state
+ * Handles CRUD operations: INIT (load), CREATE, UPDATE, DELETE
+ * Syncs updated state to localStorage
+ */
+//# UPDATE START 2025-04-20 : add localStorage persistence and initialization to App state
 function reducer(state, action) {
+  let nextState;
+
   switch (action.type) {
-    case "CREATE":
-      return [action.data, ...state]; // Add new entry to the beginning
-    case "UPDATE":
-      return state.map(
+    case "INIT":
+      return action.data; // Initialize state from localStorage
+
+    case "CREATE": {
+      nextState = [action.data, ...state];
+      break;
+    }
+
+    case "UPDATE": {
+      nextState = state.map(
         (item) =>
           String(item.id) === String(action.data.id) ? action.data : item // Type casting to avoid ID type mismatch
       ); // Replace entry with matching ID
-    case "DELETE":
-      return state.filter(
+      break;
+    }
+
+    case "DELETE": {
+      nextState = state.filter(
         (item) => String(item.id) !== String(action.id) // Type casting to avoid ID type mismatch
       ); // Remove matching entry
+      break;
+    }
+
     default:
       return state;
   }
+
+  // Sync updated state to localStorage
+  localStorage.setItem("diary", JSON.stringify(nextState));
+  return nextState;
 }
+//# UPDATE END 2025-04-20 : add localStorage persistence and initialization to App state
 
 /**
  * DiaryStateContext
@@ -65,11 +66,49 @@ export const DiaryStateContext = createContext();
  */
 export const DiaryDispatchContext = createContext();
 
+//# UPDATE START 2025-04-20 : add localStorage persistence and initialization to App state
 function App() {
-  const [data, dispatch] = useReducer(reducer, mockData);
+  const [isLoading, setIsLoading] = useState(true); // Used to block UI while loading localStorage
 
-  // Ref for generating unique IDs when creating new entries
-  const idRef = useRef(3);
+  const [data, dispatch] = useReducer(reducer, []);
+  const idRef = useRef(0); // Unique ID generator for new diary entries
+
+  /**
+   * On initial mount: load data from localStorage
+   */
+  useEffect(() => {
+    const storedData = localStorage.getItem("diary");
+
+    if (!storedData) {
+      setIsLoading(false);
+      return;
+    }
+
+    const parsedData = JSON.parse(storedData);
+
+    if (!Array.isArray(parsedData)) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Find the largest ID value to initialize idRef
+    let maxId = 0;
+    parsedData.forEach((item) => {
+      if (Number(item.id) > maxId) {
+        maxId = Number(item.id);
+      }
+    });
+
+    idRef.current = maxId + 1;
+
+    // Initialize state
+    dispatch({
+      type: "INIT",
+      data: parsedData,
+    });
+    setIsLoading(false);
+  }, []);
+  //# UPDATE END 2025-04-20 : add localStorage persistence and initialization to App state
 
   /**
    * CREATE: Add a new diary entry
@@ -127,6 +166,13 @@ function App() {
       id,
     });
   };
+
+  //# ADD START 2025-04-20 : add localStorage persistence and initialization to App state
+  //- Show loading fallback before state initialization
+  if (isLoading) {
+    return <div>Loading your diary...</div>;
+  }
+  //# ADD END 2025-04-20 : add localStorage persistence and initialization to App state
 
   /**
    * Application Root Layout
