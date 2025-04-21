@@ -4,6 +4,7 @@ import { DiaryStateContext } from "../App";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import DiaryList from "../components/DiaryList";
+import usePageTitle from "../hooks/usePageTitle"; //# ADD 2025-04-21 : import custom Hook (usePageTitle)
 
 /**
  * Filters diary entries based on the selected month
@@ -47,8 +48,10 @@ const Home = () => {
 
   const [pivotDate, setPivotDate] = useState(new Date()); // Current target month
 
+  // # ADD 2025-04-21: Set dynamic page title
+  usePageTitle("Emotion Diary");
+
   const monthlyData = getMonthlyData(pivotDate, data); // Filtered list by month
-  console.log(monthlyData);
 
   /**
    * Go to the next month

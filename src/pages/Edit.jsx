@@ -5,6 +5,7 @@ import Editor from "../components/Editor";
 import { useContext, useEffect, useState } from "react";
 import { DiaryDispatchContext, DiaryStateContext } from "../App";
 import useDiary from "../hooks/useDiary";
+import usePageTitle from "../hooks/usePageTitle"; //# ADD 2025-04-21 : import custom Hook (usePageTitle)
 
 const Edit = () => {
   const params = useParams(); // Get dynamic ID from URL
@@ -12,6 +13,9 @@ const Edit = () => {
 
   const { onDelete, onUpdate } = useContext(DiaryDispatchContext); // Context for modifying diary data
   const curDiaryItem = useDiary(params.id);
+
+  // # ADD 2025-04-21: Set dynamic page title
+  usePageTitle(`Edit Diary - ${params.id}`);
 
   /**
    * Handle delete button click.

@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import Viewer from "../components/Viewer";
 import useDiary from "../hooks/useDiary";
 import { formatDisplayDate } from "../util/get-stringed-date"; //# UPDATE 2025-04-18 : replace function (getStringedDate → formatDisplayDate)
+import usePageTitle from "../hooks/usePageTitle"; //# ADD 2025-04-21 : import custom Hook (usePageTitle)
 
 /**
  * @component Diary
@@ -13,6 +14,9 @@ import { formatDisplayDate } from "../util/get-stringed-date"; //# UPDATE 2025-0
 const Diary = () => {
   const params = useParams(); // Get diary ID from URL parameters
   const nav = useNavigate(); // React Router navigation
+
+  // # ADD 2025-04-21: Set dynamic page title
+  usePageTitle(`Diary - ${params.id}`);
 
   const curDiaryItem = useDiary(params.id); // Custom hook to fetch diary item by ID
 
